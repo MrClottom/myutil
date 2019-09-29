@@ -10,11 +10,13 @@ def cls():
     print('\n'*50)
 
 
-def confirm(query):
+def confirm(query, confirm_value='y', match_values='yn', do_lower=True):
     inp = input(query)
-    while inp.lower() not in 'yn' or not inp.lower():
+    inp_to_check = inp.lower() if do_lower else inp
+    while inp_to_check not in match_values or not inp_to_check:
         inp = input(query)
-    return inp.lower() == 'y'
+        inp_to_check = inp.lower() if do_lower else inp
+    return inp_to_check == confirm_value
 
 
 def get_inp(cond, disp, prompt, retry_disp, retry_prompt=None, clear=True):
