@@ -19,3 +19,31 @@ def extract_val(val, *attrs):
         if hasattr(val, attr):
             return getattr(val, attr)
     return val
+
+
+def tail_func(f):
+    class ArgSaver:
+        __slots__ = ['args', 'kwargs']
+
+        def __init__(self):
+            self.args = None
+            self.kwargs = None
+
+        def __call__(self, *args, **kwargs):
+            self.args = args
+            self.kwargs = kwargs
+            return self
+
+        def __iter__(self):
+            yield self.args
+            yield self.kwargs
+
+    def inner(*args, **kwargs):
+        res = ArgSaver()
+        mounted_f = f(res)
+        res = mounted_f(*args, **kwargs)
+        while isinstance(res, ArgSaver):
+            args, kwargs = res
+            res = mounted_f(*args, **kwargs)
+        return res
+    return inner
