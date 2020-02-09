@@ -89,6 +89,5 @@ def rec_decompress(obj, return_orig=False):
 
 
 def decompress_cobj(data):
-    print('data:', repr(data)[:200])
     data = json.loads(zd(data).decode())
     return rec_decompress(data)
